@@ -14,10 +14,6 @@ export const logIn = payloadData => dispatch =>
       },
       options: {
         onSuccess({ response }) {
-          console.log(
-            '🚀 ~ file: auth.js:17 ~ onSuccess ~ response:',
-            response,
-          );
           const { data, error } = response;
           // If Api response success
           if (data.status === 200) {

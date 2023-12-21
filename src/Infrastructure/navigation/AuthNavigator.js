@@ -6,6 +6,7 @@ import Entypo from "react-native-vector-icons/Entypo";
 import LoginComponent from "../../presentation/components/LogIn/LoginComponent";
 import ComingSoon from "../component/ComingSoon/ComingSoon";
 import { scale } from "../utils/screenUtility";
+import RegistrationComponents from "../../presentation/components/Registration/RegistrationComponents";
 
 const AuthNavigator = () => {
   const AuthStack = createStackNavigator();
@@ -20,8 +21,7 @@ const AuthNavigator = () => {
       <AuthStack.Screen
         options={{ headerShown: false }}
         name="Registration"
-        // component={RegistrationComponents}
-        component={ComingSoon}
+        component={RegistrationComponents}
       />
       <AuthStack.Screen
         options={{ headerShown: false }}

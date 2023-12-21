@@ -1,22 +1,18 @@
-import React, {useState, useEffect, useMemo} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {AuthContext} from './src/Infrastructure/utils/context';
+import React, { useState, useEffect, useMemo } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { AuthContext } from './src/Infrastructure/utils/context';
 import SplashComponent from './src/Infrastructure/component/SplashScreen/SplashScreen';
 import AuthNavigator from './src/Infrastructure/navigation/AuthNavigator';
 import DrawerNavigator from './src/Infrastructure/navigation/DrawerNavigator';
-// import {Provider} from 'react-native-paper';
-// import store from './src/application/store';
+import store from './src/application/store';
+import { Provider } from 'react-redux';
+import { Platform } from 'react-native';
 
-interface AuthContextProps {
-  signIn: () => void;
-  signOut: () => void;
-}
+const App = () => {
+  const [userToken, setUserToken] = useState(false);
+  const [splashTime, setSplashTime] = useState(true);
 
-const App: React.FC = () => {
-  const [userToken, setUserToken] = useState<boolean>(false);
-  const [splashTime, setSplashTime] = useState<boolean>(true);
-
-  const authContext = useMemo<AuthContextProps>(
+  const authContext = useMemo(
     () => ({
       signIn: () => {
         setUserToken(true);
@@ -31,7 +27,7 @@ const App: React.FC = () => {
   useEffect(() => {
     setTimeout(() => {
       setSplashTime(false);
-    }, 2000);
+    }, 1000);
   }, []);
 
   if (splashTime) {
@@ -43,15 +39,13 @@ const App: React.FC = () => {
   }
 
   return (
-    <>
-      {/* <Provider store={store}> */}
+    <Provider store={store}>
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
           {userToken ? <DrawerNavigator /> : <AuthNavigator />}
         </NavigationContainer>
       </AuthContext.Provider>
-      {/* </Provider> */}
-    </>
+    </Provider>
   );
 };
 

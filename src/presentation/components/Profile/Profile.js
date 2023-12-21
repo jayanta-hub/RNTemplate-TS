@@ -1,8 +1,10 @@
 import React from 'react';
-import {View, Text, Image} from 'react-native';
-import {Avatar} from 'react-native-paper';
+import { View, Text, Image } from 'react-native';
+import { Avatar } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {scale} from '../../../Infrastructure/utils/screenUtility';
+import { scale } from '../../../Infrastructure/utils/screenUtility';
+import { connect } from 'react-redux';
+import { getUserInformation } from '../../../application/store/actions/timeLine';
 import colors from '../../../Infrastructure/assets/colors/colors';
 const Profile = props => {
   const PrimEmail = [];
@@ -12,12 +14,12 @@ const Profile = props => {
   props?.userInformation?.data?.emailContacts
     ? props?.userInformation?.data?.emailContacts.filter(items => {
         if (items.type.description === 'Primary') {
-          PrimEmail.push({Primary: items.email});
+          PrimEmail.push({ Primary: items.email });
         }
       })
     : null;
   return (
-    <View style={{flex: 1, flexDirection: 'row', marginRight: scale(-30)}}>
+    <View style={{ flex: 1, flexDirection: 'row', marginRight: scale(-30) }}>
       <View
         style={{
           flex: 1,
@@ -83,4 +85,10 @@ const Profile = props => {
     </View>
   );
 };
-export default Profile;
+const mapStateToProps = ({ timeLine: { userInformation } }) => ({
+  userInformation,
+});
+const mapDispatchToProps = {
+  getUserInformation: authToken => getUserInformation(authToken),
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

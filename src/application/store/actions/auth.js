@@ -1,19 +1,23 @@
-import { FAIL, SUCCESS, LOGIN } from "../action-types";
+import { FAIL, SUCCESS, LOGIN } from '../action-types';
 
-export const logIn = (payloadData) => (dispatch) =>
+export const logIn = payloadData => dispatch =>
   dispatch({
     type: LOGIN,
     payload: {
       request: {
-        url: "api/v1/authenticate", //add endpoint
-        method: "POST",
+        url: 'api/v1/auth/signin', //add endpoint
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         data: payloadData,
       },
       options: {
         onSuccess({ response }) {
+          console.log(
+            '🚀 ~ file: auth.js:17 ~ onSuccess ~ response:',
+            response,
+          );
           const { data, error } = response;
           // If Api response success
           if (data.status === 200) {
@@ -37,6 +41,7 @@ export const logIn = (payloadData) => (dispatch) =>
             const {
               response: { data: dataError },
             } = exception.error;
+            const data = exception.error.response.data;
             dispatch({ type: `${LOGIN}_${FAIL}`, payload: { dataError } });
             return Promise.reject(dataError);
           }

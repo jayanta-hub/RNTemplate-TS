@@ -6,34 +6,45 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
   TextInput,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
-import * as yup from "yup";
-import styles from "./styles";
-import { scale } from "../../../Infrastructure/utils/screenUtility";
-import Loader from "../../../Infrastructure/component/Loader/Loader";
-import { useFormik } from "formik";
-import Logo from "../../../Infrastructure/component/Logo/Logo";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import colors from "../../../Infrastructure/assets/colors/colors";
-import CustomButton from "../../../Infrastructure/component/CustomButton/CustomButton";
-import { AuthContext } from "../../../Infrastructure/utils/context";
-import Toast from "react-native-simple-toast";
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import * as yup from 'yup';
+import styles from './styles';
+import { scale } from '../../../Infrastructure/utils/screenUtility';
+import Loader from '../../../Infrastructure/component/Loader/Loader';
+import { useFormik } from 'formik';
+import Logo from '../../../Infrastructure/component/Logo/Logo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import colors from '../../../Infrastructure/assets/colors/colors';
+import CustomButton from '../../../Infrastructure/component/CustomButton/CustomButton';
+import { AuthContext } from '../../../Infrastructure/utils/context';
+import Toast from 'react-native-simple-toast';
+import { connect } from 'react-redux';
+import { logIn } from '../../../application/store/actions/auth';
 const loginValidationSchema = yup.object().shape({
-  userID: yup.string().required("User Name / ID Required"),
-  password: yup.string().required("Password Required"),
+  userID: yup.string().required('User Name / ID Required'),
+  password: yup.string().required('Password Required'),
 });
-const LoginComponent = () => {
+const LoginComponent = props => {
   const navigation = useNavigation();
   const [status, setStatus] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(true);
   const { signIn } = React.useContext(AuthContext);
-  const formSubmitHandler = async (formData) => {
-    Toast.show("Login Success", Toast.SHORT);
-    setTimeout(async () => {
-      await signIn();
-    }, 100);
+  const formSubmitHandler = async formData => {
+    const payload = {
+      userid: formData.userID,
+      password: formData.password,
+    };
+    props
+      ?.userLogin(payload)
+      .then(res => {
+        Toast.show(res?.message || 'success.', Toast.LONG);
+        signIn();
+      })
+      .catch(e => {
+        Toast.show(e?.message || 'Something went wrong.', Toast.LONG);
+      });
   };
   const {
     handleChange,
@@ -44,7 +55,7 @@ const LoginComponent = () => {
     errors,
     handleReset,
   } = useFormik({
-    initialValues: { userID: "", password: "" },
+    initialValues: { userID: '', password: '' },
     enableReinitialize: true,
     validateOnBlur: true,
     validateOnChange: true,
@@ -58,10 +69,9 @@ const LoginComponent = () => {
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
-            justifyContent: "space-between",
-          }}
-        >
-          <View style={{ flex: 1, justifyContent: "space-between" }}>
+            justifyContent: 'space-between',
+          }}>
+          <View style={{ flex: 1, justifyContent: 'space-between' }}>
             <View style={{ flex: 1 }}>
               <TouchableOpacity style={{ ...styles.logo }}>
                 <Logo />
@@ -75,8 +85,8 @@ const LoginComponent = () => {
                       placeholder="Enter"
                       placeholderTextColor={colors.GunPowder}
                       value={values.userID}
-                      onBlur={handleBlur("userID")}
-                      onChangeText={handleChange("userID")}
+                      onBlur={handleBlur('userID')}
+                      onChangeText={handleChange('userID')}
                       style={styles.TextInputs}
                     />
                     {touched.userID && errors.userID && (
@@ -86,33 +96,31 @@ const LoginComponent = () => {
                   <View
                     style={{
                       marginTop: scale(10),
-                    }}
-                  >
+                    }}>
                     <Text style={styles.labelText}>Password</Text>
                     <View
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}>
                       <TextInput
                         name="password"
                         placeholder="Enter"
                         placeholderTextColor={colors.GunPowder}
                         value={values.password}
-                        onBlur={handleBlur("password")}
-                        onChangeText={handleChange("password")}
+                        onBlur={handleBlur('password')}
+                        onChangeText={handleChange('password')}
                         secureTextEntry={passwordVisible}
                         autoCorrect={false}
                         style={{ ...styles.TextInputs, flex: 1 }}
                       />
                       <FontAwesome5
-                        name={passwordVisible ? "eye" : "eye-slash"}
+                        name={passwordVisible ? 'eye' : 'eye-slash'}
                         onPress={() => setPasswordVisible(!passwordVisible)}
                         size={scale(20)}
                         color="grey"
                         style={{
-                          position: "absolute",
+                          position: 'absolute',
                           right: scale(10),
                           top: scale(16),
                         }}
@@ -128,9 +136,8 @@ const LoginComponent = () => {
                   <TouchableOpacity
                     style={styles.forgotContent}
                     onPress={() => {
-                      navigation.navigate("ForgotUserName");
-                    }}
-                  >
+                      navigation.navigate('ForgotUserName');
+                    }}>
                     <Text style={{ ...styles.linkText }}>
                       Forgot User Name / ID ?
                     </Text>
@@ -138,9 +145,8 @@ const LoginComponent = () => {
                   <TouchableOpacity
                     style={{ marginTop: scale(15) }}
                     onPress={() => {
-                      navigation.navigate("ForgotPassword");
-                    }}
-                  >
+                      navigation.navigate('ForgotPassword');
+                    }}>
                     <Text style={styles.linkText}>Forgot Password ?</Text>
                   </TouchableOpacity>
                 </View>
@@ -154,10 +160,10 @@ const LoginComponent = () => {
                 buttonTextStyle={{
                   color: colors.NeonAquaBlue,
                   fontSize: scale(14),
-                  fontFamily: "SourceSansPro-SemiBold",
+                  fontFamily: 'SourceSansPro-SemiBold',
                 }}
                 onPress={() => {
-                  navigation.navigate("Registration");
+                  navigation.navigate('Registration');
                 }}
               />
             </View>
@@ -167,5 +173,8 @@ const LoginComponent = () => {
     </KeyboardAvoidingView>
   );
 };
+const mapDispatchToProps = {
+  userLogin: payload => logIn(payload),
+};
 
-export default LoginComponent;
+export default connect(null, mapDispatchToProps)(LoginComponent);

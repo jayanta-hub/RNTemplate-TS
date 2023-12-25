@@ -1,6 +1,6 @@
-import {View, Image, Text} from 'react-native';
+import { View, Image, Text } from 'react-native';
 import React from 'react';
-import {scale} from '../../utils/screenUtility';
+import { scale } from '../../utils/screenUtility';
 import colors from '../../assets/colors/colors';
 import LOGOSVG from '../../assets/images/Underconstruction.svg';
 const ComingSoon = () => {
@@ -23,7 +23,6 @@ const ComingSoon = () => {
           }}
           source={require('../../assets/images/comingSoon.png')}
         />
-        <Text>sdkjnk</Text>
       </View>
     </>
   );

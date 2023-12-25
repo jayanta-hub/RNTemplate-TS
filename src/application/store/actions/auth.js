@@ -14,6 +14,10 @@ export const logIn = payloadData => dispatch =>
       },
       options: {
         onSuccess({ response }) {
+          console.log(
+            '🚀 ~ file: auth.js:17 ~ onSuccess ~ response:',
+            response,
+          );
           const { data, error } = response;
           // If Api response success
           if (data.status === 200) {
@@ -33,6 +37,10 @@ export const logIn = payloadData => dispatch =>
           return Promise.reject(error); // If you get fail response in data parameter please replace error to data
         },
         onError(exception) {
+          console.log(
+            '🚀 ~ file: auth.js:36 ~ onError ~ exception:',
+            exception,
+          );
           if (exception.error.isAxiosError) {
             const {
               response: { data: dataError },

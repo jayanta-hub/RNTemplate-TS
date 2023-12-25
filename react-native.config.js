@@ -10,5 +10,5 @@ module.exports = {
       },
     },
   },
-  assets: ['./src/assets/fonts'],
+  assets: ['./src/Infrastructure/assets/fonts'],
 };

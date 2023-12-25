@@ -39,10 +39,18 @@ const LoginComponent = props => {
     props
       ?.userLogin(payload)
       .then(res => {
+        console.log(
+          '🚀 ~ file: LoginComponent.js:42 ~ formSubmitHandler ~ res:',
+          res,
+        );
         Toast.show(res?.message || 'success.', Toast.LONG);
         signIn();
       })
       .catch(e => {
+        console.log(
+          '🚀 ~ file: LoginComponent.js:50 ~ formSubmitHandler ~ e:',
+          e,
+        );
         Toast.show(e?.message || 'Something went wrong.', Toast.LONG);
       });
   };
